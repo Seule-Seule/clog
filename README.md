@@ -48,4 +48,4 @@ Log function for c language!
 
 ## License
 
-[MIT](Licese) © Seule-Seule
+[MIT](LICENSE) © Seule-Seule
