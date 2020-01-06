@@ -9,7 +9,7 @@
 
 #include "log.h"
 
-#define DEBUG_FILE_	        "debug.log"
+
 #define MAX_STRING_LEN 		10240
 
 /*Level类别*/
@@ -38,15 +38,15 @@ static int Error_GetCurTime(char* strTime)
     return timeLen;
 }
 
-static int Error_OpenFile(int* pf)
+static int Error_OpenFile(int* pf, char *_file_name)
 {
     char	fileName[1024];
 
     memset(fileName, 0, sizeof(fileName));
 #ifdef _WIN32
-    sprintf(fileName, "D:\\Data\\Code_workspace\\log\\%s", DEBUG_FILE_);
+    sprintf(fileName, "%s", _file_name);
 #else
-    sprintf(fileName, "%s/log/%s", getenv("HOME"), DEBUG_FILE_);
+    sprintf(fileName, "%s",/* getenv("HOME"), */_file_name);
 #endif
 
     * pf = open(fileName, O_WRONLY | O_CREAT | O_APPEND, 0666);
@@ -58,7 +58,7 @@ static int Error_OpenFile(int* pf)
     return 0;
 }
 
-static void Error_Core(const char* file, int line, int level, int status, const char* fmt, va_list args)
+static void Error_Core(char * _log_file_name, const char* file, int line, int level, int status, const char* fmt, va_list args)
 {
     char str[MAX_STRING_LEN];
     int	 strLen = 0;
@@ -103,7 +103,7 @@ static void Error_Core(const char* file, int line, int level, int status, const 
     strLen += tmpStrLen;
 
     /*打开LOG文件*/
-    if (Error_OpenFile(&pf))
+    if (Error_OpenFile(&pf, _log_file_name))
     {
         return;
     }
@@ -118,7 +118,7 @@ static void Error_Core(const char* file, int line, int level, int status, const 
     return;
 }
 
-void LR_LOG(const char* file, int line, int level, int status, const char* fmt, ...)
+void LR_LOG(const char * _log_file_name, const char* file, int line, int level, int status, const char* fmt, ...)
 {
     va_list args;
 
@@ -131,7 +131,7 @@ void LR_LOG(const char* file, int line, int level, int status, const char* fmt, 
 
     /*调用核心的写LOG函数*/
     va_start(args, fmt);
-    Error_Core(file, line, level, status, fmt, args);
+    Error_Core(_log_file_name, file, line, level, status, fmt, args);
     va_end(args);
 
     return;

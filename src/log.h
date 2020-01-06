@@ -27,6 +27,6 @@ const char *fmt：可变参数
 
 /*实际使用的Level*/
 extern int  LogLevel[5];
-void LR_LOG(const char* file, int line, int level, int status, const char* fmt, ...);
+void LR_LOG(const char* _log_file_name, const char* file, int line, int level, int status, const char* fmt, ...);
 
 #endif
